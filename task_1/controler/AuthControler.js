@@ -17,8 +17,7 @@ const register = async (req, res) => {
             username,
             gender,
             email,
-            password,
-            // : bcryptjs.genSaltSync(10)
+            password, // : bcryptjs.genSaltSync(10)
         });
 
         await newUser.save();

@@ -5,8 +5,15 @@ const userSchema = new mongoose.Schema({
     // keys of the users 
     name: String,
     age: Number,
-    username:String,
-    email:String,
+    username:{
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        lowercase: true
+    },
     password: String,
     aggrement: Boolean,
     
