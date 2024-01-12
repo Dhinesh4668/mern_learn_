@@ -15,7 +15,7 @@ const register = async (req, res) => {
             username,
             gender,
             email,
-            password 
+            password
         });
 
         await newUser.save();
@@ -23,7 +23,7 @@ const register = async (req, res) => {
         // res.redirect('/user/regester')
     } catch (err) {
         console.error(err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).send(err.message);
     }
 };
 

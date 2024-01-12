@@ -4,10 +4,10 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
     name: { type: String },
     age: { type: Number },
-    username: { type: String, unique: true },
-    email: { type: String},
-    password: { type: String, minLength: 5 },
-    // agreement: Boolean,
+    username: { type: String, maxLength: 15},
+    email: { type: String, lowercase: true},
+    password: { type: String, require: true ,minLength: 5 },
+    gender: {type: String}
 });
 
 // encrypting the password
@@ -23,6 +23,6 @@ userSchema.methods.checkPassword = function (enteredPassword) {
     return bcrypt.compareSync(enteredPassword, this.password);
 };
 
-let user = mongoose.model('user', userSchema);
+const user = mongoose.model('user', userSchema);
 
 module.exports = user;
