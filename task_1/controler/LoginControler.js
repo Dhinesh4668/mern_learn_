@@ -1,29 +1,28 @@
 const express = require('express');
-const user = require('../modals/userModal'); 
+const user = require('../modals/userModal');
 
-const LoginConroler = async (req, res) => {
+const loginUser = async (req, res) => {
     try {
         // validate the user
-        const { usernameORemail, password } = req.body;
+        const { username, password } = req.body;
 
         // find user by username or email
-        const userLogin = await user.findOne({
+        const foundUser = await user.findOne({
             $or: [{ username: usernameORemail }, { email: usernameORemail }],
         });
+        if (!foundUser) {
+            return res.status(404).send("Invalid user, please sign up");
+        }
+        const isPasswordValid = await foundUser.checkPassword(password);
 
-        if (!userLogin) {
-            return res.status(401).json({ message: "Invalid user, please register" });
+        if (!isPasswordValid) {
+            console.log("Invalid user and password");
+            return res.status(401).send("Invalid user and password");
         }
-        // check the password
-        // const passMatch = await bcryptjs.compare(password, userLogin.password);
-        if (!password) {
-            return res.status(401).json({ message: "Invalid password, please try again" });
-        }
-        res.status(200).json({ message: "Login successful" });
+        res.status(200).send("Login successful");
     } catch (err) {
-        console.error(err);
         res.status(500).send(err.message);
     }
-}
+};
 
-module.exports = LoginConroler
+module.exports = loginUser;

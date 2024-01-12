@@ -1,14 +1,12 @@
-const express = require('express');
 const bcryptjs = require('bcryptjs'); 
-const user = require('../modals/userModal');  
+const user = require('../modals/userModal'); 
+
+
+// sign up process
 const register = async (req, res) => {
     try {
         // validate the user input (you might want to add more validation)
         const { name, username, age, gender, email, password } = req.body;
-
-        // hash the password
-        const salt = await bcryptjs.genSalt(10);
-        // const hashedPassword = await bcryptjs.hash(password, salt);
 
         // create the user in MongoDB
         const newUser = new user({
@@ -17,11 +15,12 @@ const register = async (req, res) => {
             username,
             gender,
             email,
-            password, // : bcryptjs.genSaltSync(10)
+            password 
         });
 
         await newUser.save();
-        res.send("success");
+        res.status(200).send("regester sucess login the page");
+        // res.redirect('/user/regester')
     } catch (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
