@@ -4,7 +4,7 @@ const user = require('../modals/userModal');
 const jwt = require('jsonwebtoken');
 
 
-const loginUser = async (req, res) => {
+const loginUser =  (req, res) => {
     try {
         // Validate the user
         const { email,username, password } = req.body;
@@ -13,6 +13,8 @@ const loginUser = async (req, res) => {
         if (loginUser) {
             const token = jwt.sign({ username: loginUser.username , password: loginUser.password}, process.env.SECRET_KEY);
             const RefreshTocken = jwt.sign({ username: loginUser.username , password: loginUser.password}, process.env.REFRESH_KEY);
+            res.status(200).send("login sucessed")
+            res.send(loginUser)
             res.json({ token, RefreshTocken });
         } else {
             res.status(401).json({ error: "Invalid credentials" });
