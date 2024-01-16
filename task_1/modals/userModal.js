@@ -6,8 +6,14 @@ const userSchema = new mongoose.Schema({
     age: { type: Number },
     username: { type: String, maxLength: 15},
     email: { type: String, lowercase: true},
-    password: { type: String, require: true ,minLength: 5 },
-    gender: {type: String}
+    password: {
+        type: String,
+        required: true,
+        validate: /^(?=.*\d)(?=.*[a-z]{2})(?=.*[A-Z]{3})(?=.*[@#$%^&+=])(?=\S+$).{8,}$/,
+        message: "Password must be at least 8 characters long and contain at least 3 uppercase letters, 2 lowercase letters, 1 special character, and 1 digit."
+    },
+    gender: {type: String},
+    terms_and_condition: {type: Boolean, required: true}
 });
 
 // encrypting the password
@@ -18,11 +24,6 @@ userSchema.pre('save', function (next) {
     }
     next();
 });
-
-userSchema.methods.checkPassword = function (enteredPassword) {
-    return bcrypt.compareSync(enteredPassword, this.password);
-};
-
 const user = mongoose.model('user', userSchema);
 
 module.exports = user;

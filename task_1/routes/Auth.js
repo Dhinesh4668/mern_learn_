@@ -4,7 +4,7 @@ const user = require('../modals/userModal')
 const jwt = require('jsonwebtoken')
 const bcryptjs = require('bcryptjs')
 const register = require('../controler/AuthControler')
-const LoginConroler = require('../controler/LoginControler')
+const loginController = require('../controler/LoginControler')
 require('dotenv').config()
 // middle ware 
 router.use(express.json())
@@ -15,7 +15,7 @@ router.post('/regester', register)
 
 
 // login
-router.post('/login', LoginConroler);
+router.post('/login', loginController);
 
 // list the data
 router.get('/show', async (req, res) => {
