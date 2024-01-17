@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const user = require('../modals/userModal')
+const user = require('../modals/user.Modal')
 const jwt = require('jsonwebtoken')
 const bcryptjs = require('bcryptjs')
-const register = require('../controler/AuthControler')
-const loginController = require('../controler/LoginControler')
+const register = require('../controler/Auth.Controler')
+const loginController = require('../controler/Login.Controler')
 require('dotenv').config()
 // middle ware 
 router.use(express.json())

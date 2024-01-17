@@ -1,16 +1,17 @@
 require('dotenv').config();
 const express = require('express');
-const user = require('../modals/userModal');
+const user = require('../modals/user.Modal'); 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const loginController = async (req, res) => {
     try {
         const { UserName, password } = req.body;
+        const encodePassword = bcrypt.hash(password, process.env.ROUND_KEY) //encrypting the enterd password 
         const loginUser = await user.findOne({
             $or: [
-                { username: UserName },
-                { email: UserName }
+                { username: { $regex: new RegExp(UserName, 'i') } },
+                { email: { $regex: new RegExp(UserName, 'i') } }
             ]
         });
 
@@ -18,8 +19,8 @@ const loginController = async (req, res) => {
             console.error('User not found:', UserName);
             return res.status(404).json({ error: "User not found. Please check your username/email." });
         }
-
-        if (await bcrypt.compare(password, loginUser.password)) {
+        const passwordMatch = await bcrypt.compare(password, loginUser.password); //comparing the password
+        if (passwordMatch) {
             const token = jwt.sign({ userId: loginUser._id, username: loginUser.username }, process.env.SECRET_KEY);
             const refreshToken = jwt.sign({ userId: loginUser._id, username: loginUser.username }, process.env.REFRESH_KEY);
             res.status(200).json({

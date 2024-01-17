@@ -1,15 +1,13 @@
 require('dotenv').config();
 const express = require('express')
-const CrudRouter = require('./routes/Auth')
-const database = require('./Db')
+const CrudRouter = require('./routes/Auth.router')
+const database = require('./config/Db.config')
 const app = express()
 const PORT_NO = process.env.PORT;
-// const cors = require('cors')
 
 //middleware 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-// app.use(cors())
 
 // databse connection
 database()
