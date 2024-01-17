@@ -1,4 +1,11 @@
 # set the base image 
 
-FROM ubuntu:latest
+FROM  node:20-alpine
 
+# working dir
+WORKDIR /app
+
+
+COPY  . .
+
+CMD npm start
