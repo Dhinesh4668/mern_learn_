@@ -1,6 +1,6 @@
 const bcryptjs = require('bcryptjs'); 
 const user = require('../modals/user.Modal'); 
-
+require('dotenv').config()
 
 // sign up process
 const register = async (req, res) => {
@@ -20,7 +20,6 @@ const register = async (req, res) => {
         });
         await newUser.save();
         res.status(200).send("regester sucess login the page");
-        res.redirect('/users/login')
     } catch (err) {
         console.error(err);
         res.status(500).send(err.message);

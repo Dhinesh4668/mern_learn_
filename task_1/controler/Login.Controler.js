@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const loginController = async (req, res) => {
     try {
         const { UserName, password } = req.body;
-        const encodePassword = bcrypt.hash(password, process.env.ROUND_KEY) //encrypting the enterd password 
+        const encodePassword = bcrypt.hash(password, 10) //encrypting the enterd password 
         const loginUser = await user.findOne({
             $or: [
                 { username: { $regex: new RegExp(UserName, 'i') } },
@@ -17,9 +17,10 @@ const loginController = async (req, res) => {
 
         if (!loginUser) {
             console.error('User not found:', UserName);
-            return res.status(404).json({ error: "User not found. Please check your username/email." });
+            return res.status(404).json({ error: `User not found "${UserName}." Please check your username/email.` });
         }
         const passwordMatch = await bcrypt.compare(password, loginUser.password); //comparing the password
+        console.log(passwordMatch)
         if (passwordMatch) {
             const token = jwt.sign({ userId: loginUser._id, username: loginUser.username }, process.env.SECRET_KEY);
             const refreshToken = jwt.sign({ userId: loginUser._id, username: loginUser.username }, process.env.REFRESH_KEY);
