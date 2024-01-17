@@ -19,8 +19,10 @@ const loginController = async (req, res) => {
             console.error('User not found:', UserName);
             return res.status(404).json({ error: `User not found "${UserName}." Please check your username/email.` });
         }
-        const passwordMatch = await bcrypt.compare(password, loginUser.password); //comparing the password
+        
+        const passwordMatch = await bcrypt.compare(password, loginUser.password); //comparing the password hashed password
         console.log(passwordMatch)
+
         if (passwordMatch) {
             const token = jwt.sign({ userId: loginUser._id, username: loginUser.username }, process.env.SECRET_KEY);
             const refreshToken = jwt.sign({ userId: loginUser._id, username: loginUser.username }, process.env.REFRESH_KEY);
