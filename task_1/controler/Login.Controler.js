@@ -24,8 +24,8 @@ const loginController = async (req, res) => {
         // console.log(passwordMatch)
 
         if (password === loginUser.password) {
-            const token = jwt.sign({ userId: loginUser._id, username: loginUser.username }, process.env.SECRET_KEY);
-            const refreshToken = jwt.sign({ userId: loginUser._id, username: loginUser.username }, process.env.REFRESH_KEY);
+            const token = jwt.sign({ userId: loginUser._id, username: loginUser.username }, process.env.SECRET_KEY,{expiresIn: '1h'});
+            const refreshToken = jwt.sign({ userId: loginUser._id, username: loginUser.username }, process.env.REFRESH_KEY,{expiresIn: '1h'});
             res.status(200).json({
                 data: { userId: loginUser._id, username: loginUser.username },
                 token,
