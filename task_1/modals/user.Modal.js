@@ -27,22 +27,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Encrypting the password
-userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
-    this.password = bcrypt.hash(this.password, 10);
-    this.cpassword = bcrypt.hash(this.password, 10);
-  }
-  next();
-});
-
-// password validation
-userSchema.methods.validatePassword = function () {
-  // Check if the password contains at least one uppercase letter, one lowercase letter, one special character, and one digit
-  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/.test(this.password);
-};
-
-
 // tems must be true
 userSchema.path("terms_and_condition").validate(function (value) {
   return value === true;

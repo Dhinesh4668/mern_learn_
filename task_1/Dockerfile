@@ -8,4 +8,4 @@ WORKDIR /app
 
 COPY  . .
 
-CMD npm start
+CMD npm install && npm start

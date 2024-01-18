@@ -6,8 +6,7 @@ require('dotenv').config()
 const register = async (req, res) => {
     try {
         const { name, username, age, gender, email, password, terms_and_condition } = req.body;
-        const hashPassword = await bcryptjs.hash(password, 10) //encrypting the password 
-        
+        const hashPassword = await bcryptjs.hash(password, 10) //encrypting the password
         // create the user in MongoDB
         const newUser = new user({
             name,
@@ -15,7 +14,7 @@ const register = async (req, res) => {
             username,
             gender,
             email,
-            password: hashPassword,
+            password,
             terms_and_condition,
         });
         await newUser.save();
