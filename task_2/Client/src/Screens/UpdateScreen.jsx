@@ -1,31 +1,29 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const UpdateScreen = () => {
-  const { id } = useParams(); // Get the ID from the route parameters
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
-  const [email, setEmail] = useState('');
-  const [mobile, setMobile] = useState('');
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [name, setName] = useState();
+  const [age, setAge] = useState();
+  const [email, setEmail] = useState();
+  const [mobile, setMobile] = useState();
 
   useEffect(() => {
-
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/api/get/${id}`);
-        const { name, age, email, mobile } = response.data; 
-        setName(name);
-        setAge(age);
-        setEmail(email);
-        setMobile(mobile);
+        const { name, age, email, mobile } = response.data;
+        setName(name || '');
+        setAge(age || '');
+        setEmail(email || '');
+        setMobile(mobile || '');
       } catch (error) {
-        console.error(error.message);
         toast.error('Error fetching data for update');
       }
     };
-
     fetchData();
   }, [id]);
 
@@ -39,7 +37,9 @@ const UpdateScreen = () => {
         email,
         mobile,
       });
-      console.log('Task updated. Task ID:', response.data.task_id);
+
+      console.log('Task updated. Task ID:', response.data._id);
+      navigate('/home');
       toast.success('Task updated successfully');
     } catch (error) {
       console.error(error.message);
@@ -54,20 +54,20 @@ const UpdateScreen = () => {
       </div>
       {/* update form */}
       <div className='container bg-secondary mt-3 p-5 rounded-4 text-white'>
-        <form action='' className='from-group' onSubmit={handleUpdate}>
+        <form className='form-group' onSubmit={handleUpdate}>
           <label>Name</label>
           <input
             type='text'
             placeholder='Name'
-            className='form-control'
             value={name}
+            className='form-control'
             onChange={(e) => setName(e.target.value)}
           />
           <br />
           <label>Age</label>
           <input
             type='number'
-            placeholder='age'
+            placeholder='Age'
             className='form-control'
             value={age}
             onChange={(e) => setAge(e.target.value)}
@@ -85,7 +85,7 @@ const UpdateScreen = () => {
           <label>Mobile</label>
           <input
             type='number'
-            placeholder='mobilenumber'
+            placeholder='Mobile Number'
             className='form-control'
             value={mobile}
             onChange={(e) => setMobile(e.target.value)}

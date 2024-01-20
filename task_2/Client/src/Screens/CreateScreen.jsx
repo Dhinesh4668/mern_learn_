@@ -1,23 +1,27 @@
 import axios from 'axios'
 import React,{useState} from 'react'
 import { toast } from 'react-toastify'
-
+import { useNavigate } from 'react-router-dom'
 const CreateScreen = () => {
   const [name, setName] = useState()
   const [age, setAge] = useState()
   const [email, setEmail] = useState()
   const [mobile, setMobile] = useState()
-
+const navigate = useNavigate()
   // handle submit
   const handleSubmit =async (e)=>{
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8080/api/create',{name, age, email, mobile});
-      console.log('Task created. Task ID:', response.data.task_id);
-      toast.success(`${name} was add the database`)
+      console.log('Task created. Task ID:', response.data.id);
+      navigate('/home')
+      toast.success(`${response.data.name} was add the database`)
     } catch (error) {
-      console.error(error.message);
-      toast.error(error)
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Error creating item dublicate value');
+      }
     }
   }
   return (

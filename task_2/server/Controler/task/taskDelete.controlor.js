@@ -1,4 +1,4 @@
-const task = require('../modals/task.modal')
+const task = require('../../modals/task.modal')
 
 const deleteTask = async (req, res) => {
     try {

@@ -1,4 +1,4 @@
-const task = require("../modals/task.modal");
+const task = require("../../modals/task.modal");
 
 const createTask = async (req, res) => {
     const { name, age, email, mobile } = req.body;

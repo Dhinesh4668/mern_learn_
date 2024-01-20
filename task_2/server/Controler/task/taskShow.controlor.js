@@ -1,4 +1,4 @@
-const task = require('../modals/task.modal')
+const task = require('../../modals/task.modal')
 const ShowTask = async (req, res) => {
     try {
       const listItem = await task.find();

@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import {toast} from 'react-toastify'
-
-
+import React, { useEffect, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import moment from "moment";
+import { auth } from "../firebase.confg";
 const HomeScreen = () => {
   const [data, setData] = useState([]);
-
+  const [user, setUser] = useState(null);
   useEffect(() => {
-    axios.get("http://localhost:8080/api/get")
+    axios
+      .get("http://localhost:8080/api/get")
       .then((response) => {
         setData(response.data);
       })
@@ -17,16 +18,25 @@ const HomeScreen = () => {
       });
   }, []);
 
-  const handleUpdate = async (id) =>{
-    useNavigate(`/update/${id}`)
-  }
+  // display username
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authuser) => {
+      if (authuser) {
+        setUser(authuser);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
-  const handleDelete = async (id, name) => {
+  const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:8080/api/delete/${id}`);
-      setData(data.filter(item => item.id !== id));
-      console.log(`Successfully deleted item with ID: ${id}`);
-      toast.success(`${name} was deleted`);
+      setData(data.filter((item) => item.id !== id));
+      toast.success(`id - ${id} was deleted`);
     } catch (error) {
       console.error(`Error deleting item with ID ${id}: ${error.message}`);
       toast.error(`Error deleting item with ID: ${id}`);
@@ -36,13 +46,33 @@ const HomeScreen = () => {
   return (
     <>
       {/* top name bar */}
-      <div className="container-fluid bg-dark text-light p-2">
-        <h3>CRUD - mern </h3>
-      </div>
+      {user ? (
+        <div className="container rounded mt-5  bg-success-subtle ustify-content-between d-flex flex-row text-black border-black p-3">
+          <h3 className="container align-content-center ">CRUD - mern </h3>
+          <h4 className="text-capitalize">
+            Welcome back 🐧, {user.displayName}
+          </h4>
+          <img
+            src={user.photoURL}
+            className="rounded-circle"
+            style={{ width: 50 }}
+            alt="user image"
+          />
+        </div>
+      ) : (
+        <div className="container rounded mt-5  bg-success-subtle ustify-content-between d-flex flex-row text-black border-black p-3">
+          <h3 className="container align-content-center ">CRUD - mern </h3>
+          <h4 className="text-capitalize">
+            Welcome back 🐧, Dhinesh
+          </h4>
+        </div>
+      )}
 
-      <div className='container mt-5'>
+      <div className="container mt-5">
         {/* Create Button */}
-        <Link type='button' className='btn btn-primary mb-3' to="/create">Create</Link>
+        <Link type="button" className="btn btn-primary mb-3" to="/create">
+          Create
+        </Link>
 
         {/* Items Table */}
         <table className="table  center table-bordered rounded table-striped">
@@ -56,21 +86,21 @@ const HomeScreen = () => {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody className="">
-            {data.map(item => (
+          <tbody className="text-center">
+            {data.map((item) => (
               <tr key={item._id}>
                 <td>{item.name}</td>
                 <td>{item.email}</td>
                 <td>{item.age}</td>
                 <td>{item.mobile}</td>
-                <td>{item.createdAt}</td>
+                <td>{moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}</td>
                 <td>
-                  <button
+                  <NavLink
                     className="btn btn-warning btn-sm me-2"
-                    onClick={() => handleUpdate(item._id)}
+                    to={`/update/${item._id}`}
                   >
                     Update
-                  </button>
+                  </NavLink>
                   <button
                     className="btn btn-danger btn-sm"
                     onClick={() => handleDelete(item._id)}
@@ -82,7 +112,7 @@ const HomeScreen = () => {
             ))}
           </tbody>
         </table>
-        </div>
+      </div>
     </>
   );
 };
