@@ -8,18 +8,17 @@ const HomeScreen = () => {
   const [data, setData] = useState([]);
   const [user, setUser] = useState(null);
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/get")
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/get");
         setData(response.data);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error(err.message);
-      });
-  }, []);
+      }
+    };
 
-  // display username
-  useEffect(() => {
+    fetchData();
+
     const unsubscribe = auth.onAuthStateChanged((authuser) => {
       if (authuser) {
         setUser(authuser);
@@ -27,15 +26,15 @@ const HomeScreen = () => {
         setUser(null);
       }
     });
+
     return () => {
       unsubscribe();
     };
   }, []);
-
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:8080/api/delete/${id}`);
-      setData(data.filter((item) => item.id !== id));
+      setData((prevData) => prevData.filter((item) => item._id !== id));
       toast.success(`id - ${id} was deleted`);
     } catch (error) {
       console.error(`Error deleting item with ID ${id}: ${error.message}`);
