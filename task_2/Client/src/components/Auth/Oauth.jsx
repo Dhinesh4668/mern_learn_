@@ -29,7 +29,7 @@ const GoogleAuth = () => {
         navigate("/home")
       ) : (
         <div className="justify-content-center">
-          <GoogleButton className="rounded-1" onClick={handleClick()} >
+          <GoogleButton className="rounded-1" onClick={handleClick} >
             Login With Google
           </GoogleButton>
         </div>
