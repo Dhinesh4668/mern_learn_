@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-
+import {useNavigate} from 'react-router-dom'
 const RegisterScreen = () => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
@@ -13,6 +13,7 @@ const RegisterScreen = () => {
   const [confromPassword, setConformPassword] = useState();
   const [dob, setDob] = useState();
 
+  const navigate = useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confromPassword) {
@@ -30,6 +31,8 @@ const RegisterScreen = () => {
           { email, password, pic, interest, gender, age, name, dob },
           config
         );
+        toast.success("regestration Sucess")
+        navigate("/login")
       } catch (err) {
         toast.info(err.message);
         console.error(err.message);

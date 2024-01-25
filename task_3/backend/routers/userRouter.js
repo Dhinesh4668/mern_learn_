@@ -7,7 +7,7 @@ const userLogin = require("../controllers/userLogin");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
-
+const ProfileInfo = require('../controllers/ProfileInfo')
 // update the image
 const updatePic = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -27,6 +27,6 @@ router.post("/user/regester", regester);
 
 router.get("/user/show", getData);
 router.post("/user/login", userLogin);
-
+router.get("/profile/:id", ProfileInfo)
 router.patch("/user/:id", upload.single("profilePic"), updateUserProfile);
 module.exports = router;

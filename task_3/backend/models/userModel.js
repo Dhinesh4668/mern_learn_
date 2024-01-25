@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     dob: {
-      type: String,
+      type: Date,
       required: true,
     },
     interest: Boolean,
@@ -41,7 +41,6 @@ userSchema.pre("save", async function (next) {
     next();
   }
   this.password = await bcrypt.hash(this.password, 10);
-  console.log(this.password);
 });
 
 const user = mongoose.model("user", userSchema);
