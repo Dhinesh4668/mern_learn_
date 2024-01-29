@@ -7,26 +7,40 @@ const userLogin = require("../controllers/userLogin");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
-const ProfileInfo = require('../controllers/ProfileInfo')
-// update the image
+const ProfileInfo = require('../controllers/ProfileInfo');
+const fs = require('fs')
+// Update the image
 const updatePic = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "assets/avathor");
+    const destinationPath = "assets/avatar";
+     
+    if (!fs.existsSync(destinationPath)) {
+      fs.mkdirSync(destinationPath, { recursive: true });
+  }
+  cb(null, destinationPath)
   },
-
-  // filename
+  // Filename
   filename: (req, file, cb) => {
-    console.log(file);
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 
-const upload = multer({ storage: updatePic });
+const fileFilter = (req, file, cb) => {
+  const allowedFileTypes = ["image/jpeg", "image/png", "image/jpg"];
 
-router.post("/user/regester", regester);
+  if (allowedFileTypes.includes(file.mimetype)) {
+      cb(null, true);
+  } else {
+      cb(new Error('Invalid file type. Only JPEG, PNG, and JPG files are allowed.'));
+  }
+};
 
+const upload = multer({ storage: updatePic, fileFilter: fileFilter });
+
+router.post("/user/register", regester);
 router.get("/user/show", getData);
 router.post("/user/login", userLogin);
-router.get("/profile/:id", ProfileInfo)
-router.patch("/user/:id", upload.single("profilePic"), updateUserProfile);
+router.get("/profile/:id", ProfileInfo);
+router.patch("/update/:id", upload.single("profilePic"), updateUserProfile);
+
 module.exports = router;

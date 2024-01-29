@@ -25,6 +25,7 @@ const UpdateScreen = () => {
       }
     };
     fetchData();
+    
   }, [id]);
 
   // handle update

@@ -5,32 +5,27 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
     },
     age: {
       type: Number,
-      required: true,
     },
     dob: {
       type: Date,
-      required: true,
     },
     interest: Boolean,
     profilePic: {
-      type: Buffer,
+      type: String,
       default:
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
     password: String,
     email: {
       type: String,
-      required: true,
       lowercase: true,
       unique: true,
     },
     gender: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true }

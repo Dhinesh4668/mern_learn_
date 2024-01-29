@@ -79,7 +79,7 @@ const AuthScreen = () => {
       <div>
         <p className="text-body">
           You don't have an account?
-          <Link to="/register" className="btn btn-link">Register</Link>
+          <Link to="/regester" className="btn btn-link">Register</Link>
         </p>
       </div>
     </div>

@@ -1,62 +1,119 @@
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import React, { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 const EditProfile = () => {
-  const {id} = useParams()
-  const[name, setName] = useState('');
-  const[age, useAge]= useState('');
-  const[dob, setDob]=useState()
-  const[gender, setGender]=useState('');
-  const[pic, setPic]=useState()
-  const navigate = useNavigate()
+  const [name, setName] = useState("");
+  const [userId, setUserId] = useState('');
+  const [age, setAge] = useState('');
+  const [profilePic, setProfilePic] = useState(null);
+  const [email, setEmail] = useState('');
+  const [previewImageUrl, setPreviewImageUrl] = useState('');
 
+  useEffect(() => {
+    const storedData = localStorage.getItem('userInfo');
+    const data = storedData ? JSON.parse(storedData) : null;
+    const userIdFromData = data ? data.data.userId : null;
+    setUserId(userIdFromData);
+  }, []);
 
-  const handleSubmit = async (e) =>{
-    e.preventDefault()
-    try{
-      const update = await axios.patch(`http://localhost:8080/api/user/${id}`, {
-        name,
-        age,
-        dob, 
-        gender,
-        pic
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(name)
+    console.log(age)
+    console.log(email)
+    console.log(profilePic)
+    try {
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('age', age);
+      formData.append('email', email);
+      formData.append('profilePic', profilePic);
+
+      const response = await axios.patch(`http://localhost:8080/api/update/${userId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-      console.log("data was update ")
+
+      const exestingInfo = await axios.get(`http://localhost:8080/api/profile/${userId}`,formData, {
+        headers: {
+          "content-type": "multiport/from-data"
+        }
+      })
+      setName(exestingInfo.name || '')
+      setAge(exestingInfo.age || '')
+      setEmail(exestingInfo.email || '')
+
+      console.log(response.data);
+      toast.success("Update successful");
       navigate('/');
-      toast.success("update was sucess")
-    }catch(err){
-      console.error(err.message)
-      toast.error(err.message)
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error(error.message);
     }
-  }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setProfilePic(file);
+
+    const imageUrl = URL.createObjectURL(file);
+    setPreviewImageUrl(imageUrl);
+  };
+
   return (
-    <div className='container'>
-      <p className='offcanvas-title'>edit user profile</p>
-      {/* edit container */}
-      <form className='form-group container container-fluid bg-body-secondary p-3 rounded' onSubmit={handleSubmit}>
+    <div className="container">
+      <h2>EditProfile</h2>
 
-        {/* name */}
-        <label className='form-lable'>Name</label>
-        <input type='text' className='form-control' value={name} onChange={e=>setName(e.target.value)} placeholder='name' />
-        {/* age */}
-        <label className='form-lable'>Age</label>
-        <input type='number' className='form-control' value={age} onChange={e=> e.target.value} placeholder='age' />
-        {/* date of birth */}
-        <label className='form-lable'>Date of Birth</label>
-        <input type='date' className='form-control' value={dob}  onChange={e=>setDob(e.target.value)} placeholder='date of birth' />
-        {/* gender */}
-        <label className='form-lable'>Gender</label>
-        <input type='text' className='form-control' value={gender} onChange={e=> setGender(e.target.value)} placeholder='gender' />
-        {/* profile pic */}
-        <label className='form-lable'>Profile Pic</label>
-        <input type='file' className='form-control' value={pic} onChange={e=> setPic(e.target.value)} placeholder='Profile pic' />
-
-        <br></br>
-        <input type='submit' className='btn btn-success w-100' placeholder='Update'/>
+      <form onSubmit={handleSubmit} className="container bg-body-secondary p-3 rounded">
+        <h6>Name</h6>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Enter name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <h6>Age</h6>
+        <input 
+          type="text"
+          className="form-control"
+          placeholder="Enter age"
+          value={age}
+          onChange={e => setAge(e.target.value)}
+        />
+        <h6>Email</h6>
+        <input 
+          type="email" 
+          className="form-control"
+          placeholder="Enter email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <h6>Profile Pic</h6>
+        <input 
+          type="file"
+          className="form-control"
+          onChange={handleFileChange} 
+        />
+        <button type="submit" className="btn btn-primary mt-2">
+          Update Profile
+        </button>
       </form>
-    </div>
-  )
-}
 
-export default EditProfile
+      <div className="container">
+        <h1>Preview</h1>
+        <h6>Name: {name}</h6>
+        <h6>Age: {age}</h6>
+        <h6>Email: {email}</h6>
+        {previewImageUrl && <img src={previewImageUrl} alt="Preview" style={{ height: '100%', width: '100%' }} />}
+      </div>
+    </div>
+  );
+};
+
+export default EditProfile;

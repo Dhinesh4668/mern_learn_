@@ -5,9 +5,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<HomeScreen />} />
+        <Route path='/profile/:id' element={<HomeScreen />} />
         <Route path='/edit/:id' element={<EditProfile />} />
-        <Route path='/user/:id' element={<ProfileScreen />} />
+        <Route path='/' element={<ProfileScreen />} />
         <Route path='/login' element={<AuthProfile />} />
         <Route path='/regester' element={<RegersterScreen />} />
       </Routes>
