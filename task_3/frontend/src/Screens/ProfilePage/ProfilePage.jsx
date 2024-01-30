@@ -1,12 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const ProfilePage = () => {
   // State to store user data
   const [userData, setUserData] = useState(null);
   const storedData = localStorage.getItem('userInfo');
-  const[image, setImage] = useState()
   const data = storedData ? JSON.parse(storedData) : null;
 
   const navigate = useNavigate();
@@ -19,21 +19,16 @@ const ProfilePage = () => {
         setUserData(response.data);
         // setImage(respon.data[0].image)
         // console.log(respons)2
+        console.log(response.data[0])
+        toast.success(response.message)
       } catch (error) {
         console.error(error.message);
       }
     };
-
-
-
-    // another get 
+    
     fetchUserData();
   }, [userId]);
-  useEffect(()=>{
-    axios.get(`http://localhost:8080/api/image`)
-    .then(res => console.log(res))
-    .catch(err => console.error(err))
-  },[])
+
   return (
     <div className='container bg-body-secondary p-3 rounded mt-5'>
       {userData && (
@@ -44,7 +39,7 @@ const ProfilePage = () => {
           <p>age: {userData.age}</p>
           <p>gender: {userData.gender}</p>
           <p>date of birth: {userData.dob}</p>
-          <img src={userData.profilePic}  className="rounded-circle" style={{ height: '100%', width: '100%' }} alt={userData.name} />
+          <img src={`http://localhost:8080/Images/${userData.profilePic}`}  className="rounded-circle" style={{  width: '25%' }} alt={userData.name} />
         </div>
       )}
 

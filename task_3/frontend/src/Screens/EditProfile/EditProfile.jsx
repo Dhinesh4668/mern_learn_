@@ -4,18 +4,24 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
-  const [name, setName] = useState("");
-  const [userId, setUserId] = useState('');
-  const [age, setAge] = useState();
+  const [name, setName] = useState();
+  const [userId, setUserId] = useState();
+  const [age, setAge] = useState('');
   const [profilePic, setProfilePic] = useState(null);
   const [email, setEmail] = useState("");
-  const [previewImageUrl, setPreviewImageUrl] = useState("");
+  const [previewImageUrl, setPreviewImageUrl] = useState();
   
   useEffect(() => {
     const storedData = localStorage.getItem('userInfo');
     const data = storedData ? JSON.parse(storedData) : null;
     const userIdFromData = data ? data.data.userId : null;
+    const userData = data ? data.data.name : null;
+    const userDataEamil = data ? data.data.email : null;
+    const userDataAge = data ? data.data.age : null;
     setUserId(userIdFromData);
+    setName(userData || "")
+    setEmail(userDataEamil || "")
+    setAge(userDataAge || '')
   }, []);
 
   const navigate = useNavigate();
@@ -34,14 +40,7 @@ const EditProfile = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-
-      const existingInfo = await axios.get(`http://localhost:8080/api/profile/${userId}`);
-      setName(existingInfo.data.name || '');
-      setAge(existingInfo.data.age || '');
-      setEmail(existingInfo.data.email || '');
-
-      console.log(response.data);
-      toast.success("Update successful");
+      toast.success(response.message);
       navigate('/');
     } catch (error) {
       console.error('Error updating profile:', error);

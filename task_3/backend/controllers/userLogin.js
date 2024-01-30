@@ -35,7 +35,7 @@ const login = async (req, res) => {
     );
     // Send response with tokens and user data
     res.status(200).json({
-      data: { userId: user._id, email: user.email, name: user.name },
+      data: { userId: user._id, email: user.email, name: user.name, age: user.age },
       token,
       refreshToken,
     });
