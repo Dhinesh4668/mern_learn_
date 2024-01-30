@@ -9,8 +9,7 @@ const multer = require("multer");
 const path = require("path");
 const ProfileInfo = require("../controllers/ProfileInfo");
 const fs = require("fs");
-
-const app = express();
+const profileEdit = require('../controllers/editProfile/profileEdit')
 
 // Update the image
 const updatePic = multer.diskStorage({
@@ -46,6 +45,12 @@ router.get("/user/show", getData);
 router.post("/user/login", userLogin);
 router.get("/profile/:id", ProfileInfo);
 router.patch("/update/:id", upload.single("profilePic"), updateUserProfile);
+
+
+
+// actual meathod
+router.patch("/patch/:id", upload.single("profilePic"), profileEdit)
+
 router.get("/image", (req,res)=>{
   user.find()
   .then(user => res.json(user))
