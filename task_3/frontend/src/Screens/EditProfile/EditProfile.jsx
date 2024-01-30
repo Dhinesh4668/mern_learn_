@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 const EditProfile = () => {
   const [name, setName] = useState("");
   const [userId, setUserId] = useState('');
-  const [age, setAge] = useState('');
+  const [age, setAge] = useState();
   const [profilePic, setProfilePic] = useState(null);
-  const [email, setEmail] = useState('');
-  const [previewImageUrl, setPreviewImageUrl] = useState('');
-
+  const [email, setEmail] = useState("");
+  const [previewImageUrl, setPreviewImageUrl] = useState("");
+  
   useEffect(() => {
     const storedData = localStorage.getItem('userInfo');
     const data = storedData ? JSON.parse(storedData) : null;
@@ -22,10 +22,6 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(name)
-    console.log(age)
-    console.log(email)
-    console.log(profilePic)
     try {
       const formData = new FormData();
       formData.append('name', name);
@@ -39,14 +35,10 @@ const EditProfile = () => {
         },
       });
 
-      const exestingInfo = await axios.get(`http://localhost:8080/api/profile/${userId}`,formData, {
-        headers: {
-          "content-type": "multiport/from-data"
-        }
-      })
-      setName(exestingInfo.name || '')
-      setAge(exestingInfo.age || '')
-      setEmail(exestingInfo.email || '')
+      const existingInfo = await axios.get(`http://localhost:8080/api/profile/${userId}`);
+      setName(existingInfo.data.name || '');
+      setAge(existingInfo.data.age || '');
+      setEmail(existingInfo.data.email || '');
 
       console.log(response.data);
       toast.success("Update successful");
@@ -67,7 +59,7 @@ const EditProfile = () => {
 
   return (
     <div className="container">
-      <h2>EditProfile</h2>
+      <h2>Edit Profile</h2>
 
       <form onSubmit={handleSubmit} className="container bg-body-secondary p-3 rounded">
         <h6>Name</h6>
@@ -110,6 +102,7 @@ const EditProfile = () => {
         <h6>Name: {name}</h6>
         <h6>Age: {age}</h6>
         <h6>Email: {email}</h6>
+        <h6>Image</h6>
         {previewImageUrl && <img src={previewImageUrl} alt="Preview" style={{ height: '100%', width: '100%' }} />}
       </div>
     </div>

@@ -5,6 +5,7 @@ const ProfileInfo =async (req, res)=>{
     try {
         const userData = await user.findById(id)
         res.send(userData)
+        console.log(userData)
     } catch (error) {
         console.error(error.message)
     }

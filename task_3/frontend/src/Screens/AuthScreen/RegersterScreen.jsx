@@ -26,11 +26,12 @@ const RegisterScreen = () => {
           },
         };
 
-        const { data } = await axios.post(
-          "http://localhost:8080/api/user/regester",
+        const data  = await axios.post(
+          "http://localhost:8080/api/user/register",
           { email, password, pic, interest, gender, age, name, dob },
           config
         );
+        console.log(data)
         toast.success("regestration Sucess")
         navigate("/login")
       } catch (err) {

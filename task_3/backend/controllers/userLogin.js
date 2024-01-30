@@ -9,7 +9,6 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     // const Salt = await bcrypt.genSaltSync(10)
     const encrypt_Pass = await bcrypt.hash(password, 10)
-    // Check if the user with the provided email exists
     const user = await userModel.findOne({ email });
     if (!user) {
       return res.status(404).json({
@@ -36,7 +35,7 @@ const login = async (req, res) => {
     );
     // Send response with tokens and user data
     res.status(200).json({
-      data: { userId: user._id, email: user.email, name: user.name, avathor: user.profilePic },
+      data: { userId: user._id, email: user.email, name: user.name },
       token,
       refreshToken,
     });
