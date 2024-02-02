@@ -5,8 +5,8 @@ const stack = createStackNavigator()
 
 const Navigation = () =>{
     <stack.Navigator>
-        <stack.Screen name="home" component={<HomeScreen />} />
-        <stack.Screen name="onbord" component={<OnbordScreen />} />
+        <stack.Screen name="home" component={HomeScreen} />
+        <stack.Screen name="onbord" component={OnbordScreen} />
     </stack.Navigator>
 }
 
