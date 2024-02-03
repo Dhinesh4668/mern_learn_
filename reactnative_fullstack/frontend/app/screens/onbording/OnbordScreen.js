@@ -98,7 +98,7 @@ const OnboardScreen = ({ navigation }) => {
                 </View>
                 {/* skip button */}
                 <View style={styles.skipButton}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=> navigation.navigate('imagePicker')}>
                         <Text style={{ fontWeight: 'bold', fontSize: 15 }}>Skip</Text>
                     </TouchableOpacity>
                 </View>

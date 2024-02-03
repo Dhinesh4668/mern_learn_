@@ -22,12 +22,11 @@ const ImagePick = () => {
             await ImagePicker.requestCameraPermissionsAsync();
             result = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsMultipleSelection: false,
                 aspect: [4, 3],
-                quality: 1,
+                quality: 1
             });
         }
-
+        // console.log(image.uri.image)
         if (!result.cancelled) {
             setImage(result.assets[0].uri);
         }
