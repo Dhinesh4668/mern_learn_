@@ -29,7 +29,7 @@ const OnbordScreen1 = () => {
             {/* form container */}
             <View Style={styles.formcontainer}>
                 <TextInput
-                    placeholder='Enter name hear '
+                    placeholder='Enter name '
                     keyboardType='default'
                     style={styles.input}
                     placeholderTextColor='#fff'
@@ -37,6 +37,12 @@ const OnbordScreen1 = () => {
                     value={name}
                     onChangeText={(text)=>setName(text.target.text)}
                 />
+
+            {/*    date of birth*/}
+                <TextInput placeholder={"enter age"} keyboardType={"number-pad"} placeholderTextColor={"#fff"} />
+            {/*    enter age*/}
+                <TextInput placeholder={"ennter age"} keyboardType={"number-pad"} placeholderTextColor={"#fff"} />
+            {/*    */}
             </View>
 
             {/*    team and condition */}
@@ -69,8 +75,6 @@ const styles = StyleSheet.create({
         paddingTop: 70
     },
     progress: {
-    },
-    formcontainer: {
     },
     input: {
         backgroundColor: "#000",
