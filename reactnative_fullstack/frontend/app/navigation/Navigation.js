@@ -4,10 +4,8 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import OnbordScreen1 from "../screens/onbording/OnbordScreen1";
 import ImagePick from "../screens/ImagePicker/ImagePicker";
 
-let Stack;
-let Tab;
-Stack = createStackNavigator();
-Tab = createBottomTabNavigator()
+let Stack= createStackNavigator();
+let Tab =  createBottomTabNavigator()
 const Navigation = () =>{
     return(
         <Stack.Navigator>
@@ -18,7 +16,9 @@ const Navigation = () =>{
                 cardOverlayEnabled: true,
                 presentation: "modal"
             }}  component={OnbordScreen} />
-            <Stack.Screen name={"imagePicker"} component={ImagePick} />
+            <Stack.Screen options={{
+                gestureEnabled: true,
+            }} name={"imagePicker"} component={ImagePick} />
         </Stack.Navigator>
     )
 }
