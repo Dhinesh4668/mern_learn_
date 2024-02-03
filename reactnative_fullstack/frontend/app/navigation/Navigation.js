@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { HomeScreen, OnbordScreen } from "../index";
 import ImagePick from "../screens/ImagePicker/ImagePicker";
 import userRegersterScreen from "../screens/auth/userRegersterScreen";
+import PushNotifications from "../Components/PushNotifications/PushNotifications";
 
 let Stack = createStackNavigator();
 let Tab = createBottomTabNavigator();
@@ -31,6 +32,7 @@ const Navigation = () => {
                 name={"imagePicker"}
                 component={ImagePick}
             />
+            <Stack.Screen name={"notification"} component={PushNotifications} />
         </Stack.Navigator>
     );
 };

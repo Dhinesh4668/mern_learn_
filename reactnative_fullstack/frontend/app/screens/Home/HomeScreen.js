@@ -11,12 +11,8 @@ const HomeScreen = ({navigation}) => {
       <Text>kdjg</Text>
       </>
         <Button title={"image Picker Screen"} onPress={()=>navigation.navigate('imagePicker')} />
-
-    {/*  get form server*/}
-      <View>
-        <Text>hello</Text>
-      </View>
-    </SafeAreaProvider>
+        <Button title={"push notification"} onPress={()=> navigation.navigate("notification") } />
+    < /SafeAreaProvider>
   )
 }
 
